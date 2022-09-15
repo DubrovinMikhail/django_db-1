@@ -16,8 +16,13 @@ def books_view(request):
 def pub_date_view(request, date):
     template = 'books/books_list.html'
     book = Book.objects.filter(pub_date=date)
-    prev = Book.objects.values('pub_date').first()
-    next = Book.objects.values('pub_date').last()
+
+    prev = Book.objects.filter(pub_date__gt=date).values('pub_date').first()
+    next = Book.objects.filter(pub_date__lt=date).values('pub_date').first()
+    # if prev == date:
+    #     prev = None
+    # if next == date:
+    #     next = None
     context = {'books': book,
                'prev': prev,
                'next': next,
